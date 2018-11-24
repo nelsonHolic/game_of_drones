@@ -1,0 +1,5 @@
+[run]
+include = game_of_drones/*
+omit = *migrations*, *tests*
+plugins =
+    django_coverage_plugin

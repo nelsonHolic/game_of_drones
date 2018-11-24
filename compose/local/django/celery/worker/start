@@ -1,0 +1,7 @@
+#!/bin/sh
+
+set -o errexit
+set -o nounset
+
+
+celery -A game_of_drones.taskapp worker -l INFO

@@ -5,6 +5,8 @@ from django.contrib import admin
 from django.views.generic import TemplateView
 from django.views import defaults as default_views
 
+from game_of_drones.game.urls import urlpatterns as gameUrl
+
 
 urlpatterns = [
     path("", TemplateView.as_view(template_name="pages/home.html"), name="home"),
@@ -20,6 +22,7 @@ urlpatterns = [
         "users/",
         include("game_of_drones.users.urls", namespace="users"),
     ),
+    path("API/", include(gameUrl)),
     path("accounts/", include("allauth.urls")),
     # Your stuff: custom urls includes go here
 ] + static(

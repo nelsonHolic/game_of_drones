@@ -6,6 +6,12 @@ class Player(models.Model):
     id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=45, unique=True)
 
+    def __repr__(self):
+        return self.name
+
+    def __str__(self):
+        return self.name
+
     class Meta:
         indexes = [models.Index(fields=['name'])]
 
@@ -33,3 +39,40 @@ class Round(models.Model):
     class Meta:
         indexes = [models.Index(fields=['game'])]
 
+
+BASIC_MOVEMENTS = [
+    'rock',
+    'paper',
+    'scissors',
+]
+
+ADVANCED_MOVEMENTS = [
+    'rock',
+    'paper',
+    'scissors',
+    'lizard',
+    'spock',
+]
+
+MOVEMENTS_WINS = {
+    'rock': [
+        'lizard',
+        'scissors',
+    ],
+    'paper': [
+        'rock',
+        'spock',
+    ],
+    'scissors': [
+        'paper',
+        'lizard',
+    ],
+    'lizard': [
+        'spock',
+        'paper'
+    ],
+    'spock': [
+        'scissors',
+        'rock',
+    ],
+}

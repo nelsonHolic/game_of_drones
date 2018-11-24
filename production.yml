@@ -38,7 +38,7 @@ services:
     depends_on:
       - django
     volumes:
-      - production_caddy:/root/.caddy
+      - production_caddy:/root/.caddy:Z
     env_file:
       - ./.envs/.production/.caddy
     ports:

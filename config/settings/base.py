@@ -70,7 +70,7 @@ THIRD_PARTY_APPS = [
 ]
 LOCAL_APPS = [
     'game_of_drones.users',
-    # Your stuff: custom apps go here
+    'game_of_drones.game',
 ]
 # https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS

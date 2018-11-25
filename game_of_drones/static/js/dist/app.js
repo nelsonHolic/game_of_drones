@@ -115,7 +115,7 @@ System.register("routers/base", [], function (exports_3, context_3) {
         }
     };
 });
-System.register("component/new_game.component", [], function (exports_4, context_4) {
+System.register("components/new_game.component", [], function (exports_4, context_4) {
     "use strict";
     var NewGameComponent;
     var __moduleName = context_4 && context_4.id;
@@ -182,7 +182,7 @@ System.register("constants/movements", [], function (exports_5, context_5) {
         }
     };
 });
-System.register("component/game_round.component", ["constants/movements"], function (exports_6, context_6) {
+System.register("components/game_round.component", ["constants/movements"], function (exports_6, context_6) {
     "use strict";
     var movements_1, GameRoundComponent;
     var __moduleName = context_6 && context_6.id;
@@ -264,7 +264,7 @@ System.register("component/game_round.component", ["constants/movements"], funct
         }
     };
 });
-System.register("component/game_result.component", [], function (exports_7, context_7) {
+System.register("components/game_result.component", [], function (exports_7, context_7) {
     "use strict";
     var GameResultComponent;
     var __moduleName = context_7 && context_7.id;
@@ -316,7 +316,7 @@ System.register("component/game_result.component", [], function (exports_7, cont
         }
     };
 });
-System.register("default_router_rules", ["component/new_game.component", "component/game_round.component", "component/game_result.component"], function (exports_8, context_8) {
+System.register("default_router_rules", ["components/new_game.component", "components/game_round.component", "components/game_result.component"], function (exports_8, context_8) {
     "use strict";
     var new_game_component_1, game_round_component_1, game_result_component_1, defaultRouterRules;
     var __moduleName = context_8 && context_8.id;

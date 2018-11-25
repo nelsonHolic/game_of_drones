@@ -34,7 +34,7 @@ class Round(models.Model):
     game = models.ForeignKey('Game', on_delete=models.CASCADE)
     p1_movement = models.CharField(max_length=10)
     p2_movement = models.CharField(max_length=10)
-    winner = models.ForeignKey('Player', on_delete=models.CASCADE)
+    winner = models.ForeignKey('Player', on_delete=models.CASCADE, null=True)
 
     class Meta:
         indexes = [models.Index(fields=['game'])]
@@ -54,7 +54,7 @@ ADVANCED_MOVEMENTS = [
     'spock',
 ]
 
-MOVEMENTS_WINS = {
+MOVEMENT_WINS = {
     'rock': [
         'lizard',
         'scissors',

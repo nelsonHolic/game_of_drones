@@ -31,7 +31,7 @@ class Round(models.Model):
 
     id = models.AutoField(primary_key=True)
     number = models.IntegerField(default=1)
-    game = models.ForeignKey('Game', on_delete=models.CASCADE)
+    game = models.ForeignKey('Game', on_delete=models.CASCADE, related_name='rounds')
     p1_movement = models.CharField(max_length=10)
     p2_movement = models.CharField(max_length=10)
     winner = models.ForeignKey('Player', on_delete=models.CASCADE, null=True)

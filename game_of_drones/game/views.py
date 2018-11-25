@@ -4,8 +4,8 @@ from rest_framework.exceptions import MethodNotAllowed
 from rest_framework.response import Response
 from rest_framework.viewsets import ViewSet
 
-from game_of_drones.game.models import Round, MOVEMENT_WINS, Game
-from game_of_drones.game.serializers import GameSerializer, RoundSerializer
+from game_of_drones.game.models import Round, MOVEMENT_WINS, Game, Player
+from game_of_drones.game.serializers import GameSerializer, RoundSerializer, GameModelSerializer
 
 
 class MultiSerializerViewSet(ViewSet):
@@ -56,16 +56,18 @@ class GameViewSet(MultiSerializerViewSet):
             game = Game.objects.select_related(
                 'player_one', 'player_two'
             ).annotate(
-                total_rounds=Count('round')
+                total_rounds=Count('rounds')
             ).get(pk=pk)
 
-            return Response({})
+            serializer = GameModelSerializer(game)
+
+            return Response(serializer.data)
         else:
             return Response({})
 
     @action(methods=['POST'], detail=True)
     def make_a_movement(self, request, pk=None):
-        game = Game.objects.select_related('player_one', 'player_two').annotate(total_rounds=Count('round')).get(pk=pk)
+        game = Game.objects.select_related('player_one', 'player_two').annotate(total_rounds=Count('rounds')).get(pk=pk)
 
         p1_movement = request.data['p1_movement']
         p2_movement = request.data['p2_movement']
@@ -76,10 +78,8 @@ class GameViewSet(MultiSerializerViewSet):
             winner = None
         elif p1_wins:
             winner = game.player_one
-            winner.name = 'player_one'  # this is for serialization purposes
         else:
             winner = game.player_two
-            winner.name = 'player_two'
 
         round_instance = Round(
             game=game, number=game.total_rounds + 1, p1_movement=p1_movement, p2_movement=p2_movement, winner=winner,
@@ -90,6 +90,14 @@ class GameViewSet(MultiSerializerViewSet):
 
         if game.total_rounds + 1 >= 3:
             del request.session['current_game']
+
+        return Response(serializer.data)
+
+    @action(methods=['GET'], detail=True)
+    def rounds_logs(self, request, pk=None):
+        rounds = Round.objects.filter(game_id=pk)
+
+        serializer = RoundSerializer(rounds, many=True)
 
         return Response(serializer.data)
 

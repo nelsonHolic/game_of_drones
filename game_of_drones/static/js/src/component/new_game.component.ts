@@ -12,7 +12,8 @@ export class NewGameComponent {
               </h3>
               <div>
                 <label for="player_one_name">player 1:</label>   
-                <input id="player_one_name" class="playerOneName">           
+                <input id="player_one_name" class="playerOneName">
+                <br>           
                 <label for="player_two_name">player 2:</label>              
                 <input id="player_two_name" class="playerTwoName">           
               </div>

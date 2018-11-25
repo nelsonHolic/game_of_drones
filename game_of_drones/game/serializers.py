@@ -9,6 +9,17 @@ def different_names(data):
         raise serializers.ValidationError(_('players cannot be the same'))
 
 
+class GameModelSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField()
+    player_one = serializers.StringRelatedField()
+    player_two = serializers.StringRelatedField()
+    total_rounds = serializers.IntegerField()
+
+    class Meta:
+        model = Game
+        fields = ('id', 'player_one', 'player_two', 'total_rounds')
+
+
 class GameSerializer(serializers.Serializer):
     id = serializers.IntegerField(read_only=True)
     player_one = serializers.CharField(max_length=45, required=True)

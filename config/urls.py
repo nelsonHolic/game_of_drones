@@ -10,11 +10,6 @@ from game_of_drones.game.urls import urlpatterns as gameUrl
 
 urlpatterns = [
     path("", TemplateView.as_view(template_name="pages/home.html"), name="home"),
-    path(
-        "about/",
-        TemplateView.as_view(template_name="pages/about.html"),
-        name="about",
-    ),
     # Django Admin, use {% url 'admin:index' %}
     path(settings.ADMIN_URL, admin.site.urls),
     # User management
@@ -22,7 +17,7 @@ urlpatterns = [
         "users/",
         include("game_of_drones.users.urls", namespace="users"),
     ),
-    path("API/", include(gameUrl)),
+    path("API/version/1/", include(gameUrl)),
     path("accounts/", include("allauth.urls")),
     # Your stuff: custom urls includes go here
 ] + static(

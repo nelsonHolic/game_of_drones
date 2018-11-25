@@ -26,6 +26,8 @@ class MultiSerializerViewSet(ViewSet):
             if self.action in actions:
                 return serializer_cls
 
+        if self.serializers['default'] is not None: return self.serializers['default']
+
         raise MethodNotAllowed(self.action)
 
 
@@ -45,6 +47,21 @@ class GameViewSet(MultiSerializerViewSet):
         request.session['current_game'] = serializer.save().id
 
         return Response(serializer.data)
+
+    @action(methods=['GET'], detail=False)
+    def session_game(self, request):
+        pk = request.session.get('current_game')
+
+        if pk is not None:
+            game = Game.objects.select_related(
+                'player_one', 'player_two'
+            ).annotate(
+                total_rounds=Count('round')
+            ).get(pk=pk)
+
+            return Response({})
+        else:
+            return Response({})
 
     @action(methods=['POST'], detail=True)
     def make_a_movement(self, request, pk=None):
@@ -70,6 +87,9 @@ class GameViewSet(MultiSerializerViewSet):
         round_instance.save()
 
         serializer = RoundSerializer(round_instance)
+
+        if game.total_rounds + 1 >= 3:
+            del request.session['current_game']
 
         return Response(serializer.data)
 

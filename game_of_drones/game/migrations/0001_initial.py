@@ -13,7 +13,7 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
-            name='Game',
+            name='GameModel',
             fields=[
                 ('id', models.AutoField(primary_key=True, serialize=False)),
                 ('creation', models.DateTimeField(auto_now_add=True)),

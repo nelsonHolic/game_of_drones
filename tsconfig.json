@@ -1,0 +1,17 @@
+{
+    "compilerOptions": {
+        "module": "system",
+        "target": "es5",
+        "removeComments": true,
+        "preserveConstEnums": true,
+        "outFile": "game_of_drones/static/js/dist/app.js",
+        "sourceMap": true
+    },
+    "include": [
+        "game_of_drones/static/js/src/**/*"
+    ],
+    "exclude": [
+        "node_modules",
+        "**/*.spec.ts"
+    ]
+}

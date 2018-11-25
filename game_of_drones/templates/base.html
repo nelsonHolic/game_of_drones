@@ -1,7 +1,7 @@
 {% load static i18n %}
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+<head>
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <title>{% block title %}game_of_drones{% endblock title %}</title>
@@ -13,53 +13,48 @@
     <!--[if lt IE 9]>
       <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js"></script>
     <![endif]-->
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/systemjs/0.20.9/system.js"></script>
     <link rel="icon" href="{% static 'images/favicons/favicon.ico' %}">
 
     {% block css %}
 
 
-    <!-- Your stuff: Third-party CSS libraries go here -->
+        <!-- Your stuff: Third-party CSS libraries go here -->
 
-    <!-- This file stores project-specific CSS -->
+        <!-- This file stores project-specific CSS -->
 
-    <link href="{% static 'css/project.css' %}" rel="stylesheet">
+        <link href="{% static 'css/project.css' %}" rel="stylesheet">
 
 
     {% endblock %}
 
-  </head>
+</head>
 
-  <body>
-    <div class="container">
+<body>
+<div id="container">
 
-      {% if messages %}
-          {% for message in messages %}
-              <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}">{{ message }}</div>
-          {% endfor %}
-      {% endif %}
+    {% block content %}
 
-      {% block content %}
-        <p>Use this document as a way to quick start any new project.</p>
-      {% endblock content %}
+    {% endblock content %}
 
-    </div> <!-- /container -->
+</div> <!-- /container -->
 
-    <!-- Le javascript
-    ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
-    {% block javascript %}
+<!-- Le javascript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+{% block javascript %}
 
 
-      <!-- Your stuff: Third-party javascript libraries go here -->
+    <!-- Your stuff: Third-party javascript libraries go here -->
 
 
-      <!-- place project specific Javascript in this file -->
+    <!-- place project specific Javascript in this file -->
 
-      <script src="{% static 'js/project.js' %}"></script>
+    <script src="{% static 'js/dist/app.js' %}"></script>
+    <script>System.import('app')</script>
 
 
-    {% endblock javascript %}
-  </body>
+{% endblock javascript %}
+</body>
 </html>
 

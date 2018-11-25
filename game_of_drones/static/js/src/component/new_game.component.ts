@@ -1,4 +1,5 @@
 import { GameModel } from "../models/game.model";
+import {BaseRouter} from "../routers/base";
 
 export class NewGameComponent {
     public playerOne:HTMLInputElement;
@@ -22,7 +23,7 @@ export class NewGameComponent {
         `;
     }
 
-    constructor(public htmlElement: HTMLElement, public gameModel: GameModel){
+    constructor(public htmlElement: HTMLElement, public gameModel: GameModel, public router: BaseRouter){
         htmlElement.innerHTML = this.htmlContent;
 
         this.playerOne = <HTMLInputElement>htmlElement.querySelector('#player_one_name');
@@ -37,11 +38,7 @@ export class NewGameComponent {
         this.gameModel.player_one = this.playerOne.value;
         this.gameModel.player_two = this.playerTwo.value;
 
-        this.gameModel.createGame().then(
-            response => {
-                debugger
-            }
-        )
+        this.gameModel.createGame().then(() => this.router.goTo('round_game'));
     }
 
 }

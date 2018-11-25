@@ -5,7 +5,31 @@ export class GameModel {
     public player_one: string;
     public player_two: string;
     public round_number: number = 1;
+    public round_logs: IRoundResponse[];
 
+    public get winner(): string {
+        const results = {};
+
+        for(const log of this.round_logs) {
+            if(!log.winner) {
+                continue
+            }
+
+            if(results[log.winner]) {
+                results[log.winner] += 1
+            } else {
+                results[log.winner] = 1;
+            }
+        }
+
+        if (results[this.player_one] > results[this.player_two]) {
+            return this.player_one
+        } else if (results[this.player_one] < results[this.player_two]) {
+            return this.player_two
+        } else {
+            return null;
+        }
+    }
 
     constructor() { }
 
@@ -18,7 +42,6 @@ export class GameModel {
             headers: { 'Content-Type': 'application/json' },
         }).then(response => response.json())
             .then((dataResponse: IGameResponse) => {
-                debugger;
                 this.id = dataResponse.id;
                 this.player_one = dataResponse.player_one;
                 this.player_two = dataResponse.player_two;
@@ -59,6 +82,7 @@ export class GameModel {
         return fetch(`/API/version/1/game/${this.id}/rounds_logs/`)
             .then(response => response.json())
             .then((dataResponse: IRoundResponse[]) => {
+                this.round_logs = dataResponse;
                 return dataResponse;
             })
     }

@@ -1,7 +1,7 @@
 {
     "compilerOptions": {
         "module": "system",
-        "target": "es5",
+        "target": "es2015",
         "removeComments": true,
         "preserveConstEnums": true,
         "outFile": "game_of_drones/static/js/dist/app.js",

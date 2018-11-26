@@ -16,6 +16,13 @@ export class GameModel {
     public handleHttpCalls(url, init?) {
         return fetch(url, init).then(response => {
             if(!response.ok) {
+                response.json().then(dataErr => {
+                    let message = ""
+                    for(const key in dataErr) {
+                        message += `${key} : ${dataErr[key]}\n`;
+                    }
+                    alert(message);
+                });
                 throw Error(response.statusText);
             }
 
@@ -26,27 +33,22 @@ export class GameModel {
     public createGame(): Promise<IGameResponse> {
         const data = { player_one: this.player_one, player_two: this.player_two };
 
-        return fetch('/API/version/1/game/', {
+        return this.handleHttpCalls('/API/version/1/game/', {
             method: 'POST',
             body: JSON.stringify(data),
             headers: { 'Content-Type': 'application/json' },
-        }).then(response => response.json())
-            .then((dataResponse: IGameResponse) => {
-                this.id = dataResponse.id;
-                this.player_one = dataResponse.player_one;
-                this.player_two = dataResponse.player_two;
-                this.round_number = 1;
+        }).then((dataResponse: IGameResponse) => {
+            this.id = dataResponse.id;
+            this.player_one = dataResponse.player_one;
+            this.player_two = dataResponse.player_two;
+            this.round_number = 1;
 
-                return dataResponse;
-            }).catch(err => {
-                debugger;
-                return {} as IGameResponse
-            })
+            return dataResponse;
+        })
     }
 
     public getSessionGame(): Promise<IGameResponse> {
-        return fetch('/API/version/1/game/session_game/')
-            .then(response => response.json())
+        return this.handleHttpCalls('/API/version/1/game/session_game/')
             .then((dataResponse: IGameResponse) => {
                 if(dataResponse.id) {
                     this.id = dataResponse.id;
@@ -62,18 +64,15 @@ export class GameModel {
     public makeMovements(p1_movement, p2_movement): Promise<IRoundResponse> {
         const data = { p1_movement, p2_movement };
 
-        return fetch(`/API/version/1/game/${this.id}/make_a_movement/`, {
+        return this.handleHttpCalls(`/API/version/1/game/${this.id}/make_a_movement/`, {
             method: 'POST',
             body: JSON.stringify(data),
             headers: { 'Content-Type': 'application/json' },
-        }).then(
-            response => response.json() as Promise<IRoundResponse>,
-        )
+        })
     }
 
     public getGameRoundsLogs(): Promise<IRoundResponse[]> {
-        return fetch(`/API/version/1/game/${this.id}/rounds_logs/`)
-            .then(response => response.json())
+        return this.handleHttpCalls(`/API/version/1/game/${this.id}/rounds_logs/`)
             .then((dataResponse: IRoundResponse[]) => {
                 this.round_logs = dataResponse;
                 return dataResponse;

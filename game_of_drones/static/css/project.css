@@ -17,12 +17,22 @@ body {
 }
 
 .btn-game {
+  transition: 0.5s;
   border: none;
   padding: 35px;
-  margin: 3px;
+  margin: 6px;
   display: inline-block;
-
+  border-radius: 50%;
   font-size: 0;
+  outline:none;
+}
+
+
+.btn-game:hover {
+  cursor: pointer;
+  transition: 0.5s;
+  margin: 0;
+  padding: 41px;
 }
 
 .btn-rock {
@@ -48,13 +58,6 @@ body {
 .btn-lizard {
   background: url("../images/icons/lizard.png");
   background-size: 100%;
-}
-
-.btn-game:hover {
-  cursor: pointer;
-  transition: 0.5s;
-  margin: 0;
-  padding: 41px;
 }
 
 .playerName {

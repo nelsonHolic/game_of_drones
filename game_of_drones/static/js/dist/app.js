@@ -24,6 +24,13 @@ System.register("models/game.model", [], function (exports_2, context_2) {
                 handleHttpCalls(url, init) {
                     return fetch(url, init).then(response => {
                         if (!response.ok) {
+                            response.json().then(dataErr => {
+                                let message = "";
+                                for (const key in dataErr) {
+                                    message += `${key} : ${dataErr[key]}\n`;
+                                }
+                                alert(message);
+                            });
                             throw Error(response.statusText);
                         }
                         return response.json();
@@ -31,25 +38,20 @@ System.register("models/game.model", [], function (exports_2, context_2) {
                 }
                 createGame() {
                     const data = { player_one: this.player_one, player_two: this.player_two };
-                    return fetch('/API/version/1/game/', {
+                    return this.handleHttpCalls('/API/version/1/game/', {
                         method: 'POST',
                         body: JSON.stringify(data),
                         headers: { 'Content-Type': 'application/json' },
-                    }).then(response => response.json())
-                        .then((dataResponse) => {
+                    }).then((dataResponse) => {
                         this.id = dataResponse.id;
                         this.player_one = dataResponse.player_one;
                         this.player_two = dataResponse.player_two;
                         this.round_number = 1;
                         return dataResponse;
-                    }).catch(err => {
-                        debugger;
-                        return {};
                     });
                 }
                 getSessionGame() {
-                    return fetch('/API/version/1/game/session_game/')
-                        .then(response => response.json())
+                    return this.handleHttpCalls('/API/version/1/game/session_game/')
                         .then((dataResponse) => {
                         if (dataResponse.id) {
                             this.id = dataResponse.id;
@@ -62,15 +64,14 @@ System.register("models/game.model", [], function (exports_2, context_2) {
                 }
                 makeMovements(p1_movement, p2_movement) {
                     const data = { p1_movement, p2_movement };
-                    return fetch(`/API/version/1/game/${this.id}/make_a_movement/`, {
+                    return this.handleHttpCalls(`/API/version/1/game/${this.id}/make_a_movement/`, {
                         method: 'POST',
                         body: JSON.stringify(data),
                         headers: { 'Content-Type': 'application/json' },
-                    }).then(response => response.json());
+                    });
                 }
                 getGameRoundsLogs() {
-                    return fetch(`/API/version/1/game/${this.id}/rounds_logs/`)
-                        .then(response => response.json())
+                    return this.handleHttpCalls(`/API/version/1/game/${this.id}/rounds_logs/`)
                         .then((dataResponse) => {
                         this.round_logs = dataResponse;
                         return dataResponse;
@@ -153,10 +154,6 @@ System.register("components/new_game.component", [], function (exports_5, contex
                     this.submit = () => {
                         this.gameModel.player_one = this.playerOne.value;
                         this.gameModel.player_two = this.playerTwo.value;
-                        if (!this.gameModel.player_one && !this.gameModel.player_two) {
-                            alert('please fill all of the names');
-                            return;
-                        }
                         this.gameModel.createGame().then(() => this.router.goTo('round_game'));
                     };
                     htmlElement.innerHTML = this.htmlContent;

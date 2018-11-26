@@ -38,10 +38,6 @@ export class NewGameComponent {
         this.gameModel.player_one = this.playerOne.value;
         this.gameModel.player_two = this.playerTwo.value;
 
-        if(!this.gameModel.player_one && !this.gameModel.player_two) {
-            alert('please fill all of the names');
-            return;
-        }
 
         this.gameModel.createGame().then(() => this.router.goTo('round_game'));
     }

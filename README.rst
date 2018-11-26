@@ -42,7 +42,7 @@ Ubuntu/Debian
   $ apt-get install docker docker-compose
 
 
-Now the only you just need to do, it's to run docker-compose against local.yml
+Now you just need to run docker-compose against local.yml
 
 ::
 

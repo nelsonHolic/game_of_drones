@@ -13,10 +13,10 @@ export class NewGameComponent {
               </h3>
               <div>
                 <label for="player_one_name">player 1:</label>   
-                <input id="player_one_name" class="playerOneName">
+                <input id="player_one_name" class="playerName playerOneName">
                 <br>           
                 <label for="player_two_name">player 2:</label>              
-                <input id="player_two_name" class="playerTwoName">           
+                <input id="player_two_name" class="playerName playerTwoName">           
               </div>
               <button class="startButton">Start</button>      
             </div>
@@ -37,6 +37,11 @@ export class NewGameComponent {
     private submit = ()=> {
         this.gameModel.player_one = this.playerOne.value;
         this.gameModel.player_two = this.playerTwo.value;
+
+        if(!this.gameModel.player_one && !this.gameModel.player_two) {
+            alert('please fill all of the names');
+            return;
+        }
 
         this.gameModel.createGame().then(() => this.router.goTo('round_game'));
     }

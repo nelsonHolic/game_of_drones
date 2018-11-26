@@ -19,27 +19,15 @@ System.register("models/game.model", [], function (exports_2, context_2) {
                     this.round_number = 1;
                 }
                 get winner() {
-                    const results = {};
-                    for (const log of this.round_logs) {
-                        if (!log.winner) {
-                            continue;
+                    return this.get_winner();
+                }
+                handleHttpCalls(url, init) {
+                    return fetch(url, init).then(response => {
+                        if (!response.ok) {
+                            throw Error(response.statusText);
                         }
-                        if (results[log.winner]) {
-                            results[log.winner] += 1;
-                        }
-                        else {
-                            results[log.winner] = 1;
-                        }
-                    }
-                    if (results[this.player_one] > results[this.player_two]) {
-                        return this.player_one;
-                    }
-                    else if (results[this.player_one] < results[this.player_two]) {
-                        return this.player_two;
-                    }
-                    else {
-                        return null;
-                    }
+                        return response.json();
+                    });
                 }
                 createGame() {
                     const data = { player_one: this.player_one, player_two: this.player_two };
@@ -54,6 +42,9 @@ System.register("models/game.model", [], function (exports_2, context_2) {
                         this.player_two = dataResponse.player_two;
                         this.round_number = 1;
                         return dataResponse;
+                    }).catch(err => {
+                        debugger;
+                        return {};
                     });
                 }
                 getSessionGame() {
@@ -85,15 +76,47 @@ System.register("models/game.model", [], function (exports_2, context_2) {
                         return dataResponse;
                     });
                 }
+                get_winner() {
+                    const results = {};
+                    for (const log of this.round_logs) {
+                        if (!log.winner) {
+                            continue;
+                        }
+                        if (results[log.winner]) {
+                            results[log.winner] += 1;
+                        }
+                        else {
+                            results[log.winner] = 1;
+                        }
+                    }
+                    if (results[this.player_one] > results[this.player_two]) {
+                        return this.player_one;
+                    }
+                    else if (results[this.player_one] < results[this.player_two]) {
+                        return this.player_two;
+                    }
+                    else {
+                        return null;
+                    }
+                }
             };
             exports_2("GameModel", GameModel);
         }
     };
 });
-System.register("routers/base", [], function (exports_3, context_3) {
+System.register("interfaces/router.interfaces", [], function (exports_3, context_3) {
+    "use strict";
+    var __moduleName = context_3 && context_3.id;
+    return {
+        setters: [],
+        execute: function () {
+        }
+    };
+});
+System.register("routers/base", [], function (exports_4, context_4) {
     "use strict";
     var BaseRouter;
-    var __moduleName = context_3 && context_3.id;
+    var __moduleName = context_4 && context_4.id;
     return {
         setters: [],
         execute: function () {
@@ -111,14 +134,14 @@ System.register("routers/base", [], function (exports_3, context_3) {
                     };
                 }
             };
-            exports_3("BaseRouter", BaseRouter);
+            exports_4("BaseRouter", BaseRouter);
         }
     };
 });
-System.register("components/new_game.component", [], function (exports_4, context_4) {
+System.register("components/new_game.component", [], function (exports_5, context_5) {
     "use strict";
     var NewGameComponent;
-    var __moduleName = context_4 && context_4.id;
+    var __moduleName = context_5 && context_5.id;
     return {
         setters: [],
         execute: function () {
@@ -130,6 +153,10 @@ System.register("components/new_game.component", [], function (exports_4, contex
                     this.submit = () => {
                         this.gameModel.player_one = this.playerOne.value;
                         this.gameModel.player_two = this.playerTwo.value;
+                        if (!this.gameModel.player_one && !this.gameModel.player_two) {
+                            alert('please fill all of the names');
+                            return;
+                        }
                         this.gameModel.createGame().then(() => this.router.goTo('round_game'));
                     };
                     htmlElement.innerHTML = this.htmlContent;
@@ -146,33 +173,33 @@ System.register("components/new_game.component", [], function (exports_4, contex
               </h3>
               <div>
                 <label for="player_one_name">player 1:</label>   
-                <input id="player_one_name" class="playerOneName">
+                <input id="player_one_name" class="playerName playerOneName">
                 <br>           
                 <label for="player_two_name">player 2:</label>              
-                <input id="player_two_name" class="playerTwoName">           
+                <input id="player_two_name" class="playerName playerTwoName">           
               </div>
               <button class="startButton">Start</button>      
             </div>
         `;
                 }
             };
-            exports_4("NewGameComponent", NewGameComponent);
+            exports_5("NewGameComponent", NewGameComponent);
         }
     };
 });
-System.register("constants/movements", [], function (exports_5, context_5) {
+System.register("constants/movements", [], function (exports_6, context_6) {
     "use strict";
     var BASIC_MOVEMENTS, ADVANCED_MOVEMENTS;
-    var __moduleName = context_5 && context_5.id;
+    var __moduleName = context_6 && context_6.id;
     return {
         setters: [],
         execute: function () {
-            exports_5("BASIC_MOVEMENTS", BASIC_MOVEMENTS = [
+            exports_6("BASIC_MOVEMENTS", BASIC_MOVEMENTS = [
                 'rock',
                 'paper',
                 'scissors',
             ]);
-            exports_5("ADVANCED_MOVEMENTS", ADVANCED_MOVEMENTS = [
+            exports_6("ADVANCED_MOVEMENTS", ADVANCED_MOVEMENTS = [
                 'rock',
                 'paper',
                 'scissors',
@@ -182,10 +209,10 @@ System.register("constants/movements", [], function (exports_5, context_5) {
         }
     };
 });
-System.register("components/game_round.component", ["constants/movements"], function (exports_6, context_6) {
+System.register("components/game_round.component", ["constants/movements"], function (exports_7, context_7) {
     "use strict";
     var movements_1, GameRoundComponent;
-    var __moduleName = context_6 && context_6.id;
+    var __moduleName = context_7 && context_7.id;
     return {
         setters: [
             function (movements_1_1) {
@@ -218,7 +245,7 @@ System.register("components/game_round.component", ["constants/movements"], func
               <h1>Round ${this.round_number}</h1>
               <h2>${this.current_player.name}, make a movement: </h2>
               <div> 
-                ${movements_1.BASIC_MOVEMENTS.map((movement, index) => `<button id="button${index}">${movement}</button>`).join('')}
+                ${movements_1.BASIC_MOVEMENTS.map((movement, index) => `<button id="button${index}" class="btn-game btn-${movement}">${movement}</button>`).join('')}
               </div>
           </div>
           <div id="roundLogs">
@@ -227,7 +254,10 @@ System.register("components/game_round.component", ["constants/movements"], func
               <tr>
                 <th>Round</th> <th>Winner</th>
               </tr>
-              ${this.roundsLogs.map((log, index) => `<tr><td>${log.number}</td><td>${log.winner}</td></tr>`).join('')}
+              ${this.roundsLogs.map((log, index) => `<tr>
+                  <td>${log.number}</td>
+                  <td>${log.winner ? log.winner : 'tie'}</td>
+                 </tr>`).join('')}
               </table>          
           </div>
         </div>`;
@@ -260,14 +290,14 @@ System.register("components/game_round.component", ["constants/movements"], func
                     this.updateView();
                 }
             };
-            exports_6("GameRoundComponent", GameRoundComponent);
+            exports_7("GameRoundComponent", GameRoundComponent);
         }
     };
 });
-System.register("components/game_result.component", [], function (exports_7, context_7) {
+System.register("components/game_result.component", [], function (exports_8, context_8) {
     "use strict";
     var GameResultComponent;
-    var __moduleName = context_7 && context_7.id;
+    var __moduleName = context_8 && context_8.id;
     return {
         setters: [],
         execute: function () {
@@ -312,14 +342,14 @@ System.register("components/game_result.component", [], function (exports_7, con
                     newGameButton.onclick = this.newGame;
                 }
             };
-            exports_7("GameResultComponent", GameResultComponent);
+            exports_8("GameResultComponent", GameResultComponent);
         }
     };
 });
-System.register("default_router_rules", ["components/new_game.component", "components/game_round.component", "components/game_result.component"], function (exports_8, context_8) {
+System.register("default_router_rules", ["components/new_game.component", "components/game_round.component", "components/game_result.component"], function (exports_9, context_9) {
     "use strict";
     var new_game_component_1, game_round_component_1, game_result_component_1, defaultRouterRules;
-    var __moduleName = context_8 && context_8.id;
+    var __moduleName = context_9 && context_9.id;
     return {
         setters: [
             function (new_game_component_1_1) {
@@ -333,7 +363,7 @@ System.register("default_router_rules", ["components/new_game.component", "compo
             }
         ],
         execute: function () {
-            exports_8("defaultRouterRules", defaultRouterRules = [
+            exports_9("defaultRouterRules", defaultRouterRules = [
                 { path: 'new_game', component: new_game_component_1.NewGameComponent },
                 { path: 'round_game', component: game_round_component_1.GameRoundComponent },
                 { path: 'result_game', component: game_result_component_1.GameResultComponent },
@@ -341,10 +371,10 @@ System.register("default_router_rules", ["components/new_game.component", "compo
         }
     };
 });
-System.register("app", ["models/game.model", "routers/base", "default_router_rules"], function (exports_9, context_9) {
+System.register("app", ["models/game.model", "routers/base", "default_router_rules"], function (exports_10, context_10) {
     "use strict";
     var game_model_1, base_1, default_router_rules_1, GameOfDronesApp, app;
-    var __moduleName = context_9 && context_9.id;
+    var __moduleName = context_10 && context_10.id;
     return {
         setters: [
             function (game_model_1_1) {

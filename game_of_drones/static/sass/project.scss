@@ -1,7 +1,3 @@
-
-
-
-
 // project specific CSS goes here
 
 ////////////////////////////////
@@ -35,3 +31,70 @@ $red: #b94a48;
   border-color: $dark-pink;
   color: $red;
 }
+
+
+
+body {
+  font-family: "Comic Sans MS", serif;
+}
+
+.btn-game {
+  border: none;
+  padding: 35px;
+  margin: 3px;
+  display: inline-block;
+
+  font-size: 0;
+}
+
+.btn-rock {
+  background: url("../images/icons/rock.png");
+  background-size: 100%;
+}
+
+.btn-paper {
+  background: url("../images/icons/paper.png");
+  background-size: 100%;
+}
+
+.btn-scissors {
+  background: url("../images/icons/scissors.png");
+  background-size: 100%;
+}
+
+.btn-spock {
+  background: url("../images/icons/spock.png");
+  background-size: 100%;
+}
+
+.btn-lizard {
+  background: url("../images/icons/lizard.png");
+  background-size: 100%;
+}
+
+.btn-game:hover {
+  cursor: pointer;
+  transition: 0.5s;
+  margin: 0;
+  padding: 41px;
+}
+
+.playerName {
+  margin: 10px;
+  border: solid 3px black;
+  border-radius: 5%;
+}
+
+#container {
+  height: 100%;
+  padding: 0;
+  margin: 0;
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+

@@ -13,6 +13,16 @@ export class GameModel {
 
     constructor() { }
 
+    public handleHttpCalls(url, init?) {
+        return fetch(url, init).then(response => {
+            if(!response.ok) {
+                throw Error(response.statusText);
+            }
+
+            return response.json();
+        })
+    }
+
     public createGame(): Promise<IGameResponse> {
         const data = { player_one: this.player_one, player_two: this.player_two };
 
@@ -28,6 +38,9 @@ export class GameModel {
                 this.round_number = 1;
 
                 return dataResponse;
+            }).catch(err => {
+                debugger;
+                return {} as IGameResponse
             })
     }
 

@@ -21,7 +21,9 @@ export class GameRoundComponent {
               <h1>Round ${this.round_number}</h1>
               <h2>${this.current_player.name}, make a movement: </h2>
               <div> 
-                ${BASIC_MOVEMENTS.map((movement, index) =>`<button id="button${index}">${movement}</button>`).join('')}
+                ${BASIC_MOVEMENTS.map((movement, index) =>
+                    `<button id="button${index}" class="btn-game btn-${movement}">${movement}</button>`
+                ).join('')}
               </div>
           </div>
           <div id="roundLogs">
@@ -30,7 +32,12 @@ export class GameRoundComponent {
               <tr>
                 <th>Round</th> <th>Winner</th>
               </tr>
-              ${this.roundsLogs.map((log, index) =>`<tr><td>${log.number}</td><td>${log.winner}</td></tr>`).join('')}
+              ${this.roundsLogs.map((log, index) =>
+                `<tr>
+                  <td>${log.number}</td>
+                  <td>${log.winner? log.winner: 'tie'}</td>
+                 </tr>`
+              ).join('')}
               </table>          
           </div>
         </div>`;

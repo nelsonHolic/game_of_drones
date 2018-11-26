@@ -39,9 +39,7 @@ export class GameResultComponent {
     }
 
     public playAgain = () => {
-        this.gameModel.createGame().then(
-            response => this.router.goTo('round_game'),
-        );
+        this.gameModel.createGame().then(response => this.router.goTo('round_game'));
     };
 
     public newGame = () => {

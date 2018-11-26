@@ -18,9 +18,6 @@ Moved to settings_.
 
 .. _settings: http://cookiecutter-django.readthedocs.io/en/latest/settings.html
 
-Basic Commands
---------------
-
 
 Set-up
 ^^^^^^
@@ -28,7 +25,7 @@ Set-up
 This project uses docker to build the whole app, to make this work properly, you must have installed docker:
 
 
-Fedora/Centos/RHDL
+Fedora/Centos/RHEL
 ^^^^^^^^^^^^^^^^^^
 
 ::
@@ -36,14 +33,24 @@ Fedora/Centos/RHDL
   $ dnf install docker docker-compose
 
 
-Ubunto/Debian
-^^^^^^^^^^^^^^^^^^
+Ubuntu/Debian
+^^^^^^^^^^^^^
 
 ::
 
   $ apt-get update
   $ apt-get install docker docker-compose
 
+
+Now the only you just need to do, it's to run docker-compose against local.yml
+
+::
+
+  $ docker-compose -f local.yml up
+
+
+Basic Commands
+--------------
 
 
 Setting Up Your Users

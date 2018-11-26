@@ -48,6 +48,7 @@ Now you just need to run docker-compose against local.yml
 
   $ docker-compose -f local.yml up
 
+You can access through **locahost:8000**
 
 Basic Commands
 --------------

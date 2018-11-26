@@ -21,6 +21,31 @@ Moved to settings_.
 Basic Commands
 --------------
 
+
+Set-up
+^^^^^^
+
+This project uses docker to build the whole app, to make this work properly, you must have installed docker:
+
+
+Fedora/Centos/RHDL
+^^^^^^^^^^^^^^^^^^
+
+::
+
+  $ dnf install docker docker-compose
+
+
+Ubunto/Debian
+^^^^^^^^^^^^^^^^^^
+
+::
+
+  $ apt-get update
+  $ apt-get install docker docker-compose
+
+
+
 Setting Up Your Users
 ^^^^^^^^^^^^^^^^^^^^^
 
@@ -32,14 +57,6 @@ Setting Up Your Users
 
 For convenience, you can keep your normal user logged in on Chrome and your superuser logged in on Firefox (or similar), so that you can see how the site behaves for both kinds of users.
 
-Type checks
-^^^^^^^^^^^
-
-Running type checks with mypy:
-
-::
-
-  $ mypy game_of_drones
 
 Test coverage
 ^^^^^^^^^^^^^

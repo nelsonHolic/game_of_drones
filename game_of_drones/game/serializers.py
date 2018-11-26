@@ -13,24 +13,28 @@ class GameModelSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField()
     player_one = serializers.StringRelatedField()
     player_two = serializers.StringRelatedField()
+    mode = serializers.CharField()
     total_rounds = serializers.IntegerField()
 
     class Meta:
         model = Game
-        fields = ('id', 'player_one', 'player_two', 'total_rounds')
+        fields = ('id', 'player_one', 'player_two', 'mode', 'total_rounds')
 
 
 class GameSerializer(serializers.Serializer):
     id = serializers.IntegerField(read_only=True)
-    player_one = serializers.CharField(max_length=45, required=True)
-    player_two = serializers.CharField(max_length=45, required=True)
+    player_one = serializers.CharField(max_length=45)
+    player_two = serializers.CharField(max_length=45)
+    mode = serializers.CharField(max_length=10, required=False)
 
     def create(self, validated_data):
         player_one, created = Player.objects.get_or_create(name=validated_data['player_one'])
         player_two, created = Player.objects.get_or_create(name=validated_data['player_two'])
-        game = Game(player_one=player_one, player_two=player_two)
+        mode = validated_data.get('mode', 'normal')
+        game = Game(player_one=player_one, player_two=player_two, mode=mode)
         game.save()
         validated_data['id'] = game.id
+        validated_data['mode'] = mode
         return game
 
     class Meta:

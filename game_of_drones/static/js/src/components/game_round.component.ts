@@ -1,5 +1,5 @@
 import { GameModel } from "../models/game.model";
-import { BASIC_MOVEMENTS } from "../constants/movements";
+import { ADVANCED_MOVEMENTS, BASIC_MOVEMENTS } from "../constants/movements";
 import { IPlayerRound, IRoundResponse } from "../interfaces/game.interfaces";
 import { BaseRouter } from "../routers/base";
 
@@ -8,6 +8,7 @@ export class GameRoundComponent {
     private round_number: number = 1;
     private current_player: IPlayerRound;
     private roundsLogs: IRoundResponse[] = [];
+    private MOVEMENTS: string[] = [];
 
 
     private players_movements = {
@@ -21,7 +22,7 @@ export class GameRoundComponent {
               <h1>Round ${this.round_number}</h1>
               <h2>${this.current_player.name}, make a movement: </h2>
               <div> 
-                ${BASIC_MOVEMENTS.map((movement, index) =>
+                ${this.MOVEMENTS.map((movement, index) =>
                     `<button id="button${index}" class="btn-game btn-${movement}">${movement}</button>`
                 ).join('')}
               </div>
@@ -46,6 +47,13 @@ export class GameRoundComponent {
     constructor(public htmlElement: HTMLElement, public gameModel: GameModel, public router: BaseRouter){
         this.round_number = gameModel.round_number;
         this.current_player = { name: this.gameModel.player_one, player: "player_one" };
+
+        if (gameModel.mode === 'normal') {
+            this.MOVEMENTS = BASIC_MOVEMENTS;
+        } else {
+            this.MOVEMENTS = ADVANCED_MOVEMENTS;
+        }
+
         this.updateView();
         this.gameModel.getGameRoundsLogs().then(roundsLogs => {
             this.roundsLogs = roundsLogs;
@@ -57,7 +65,7 @@ export class GameRoundComponent {
         this.htmlElement.innerHTML = this.htmlContent;
         const buttons = Array.prototype.slice.call(this.htmlElement.querySelectorAll('button'));
         buttons.forEach((button:HTMLButtonElement, index) => {
-            button.onclick = (event) => this.makeMovement(BASIC_MOVEMENTS[index]);
+            button.onclick = (event) => this.makeMovement(this.MOVEMENTS[index]);
         })
     }
 

@@ -6,6 +6,7 @@ export class GameModel {
     public player_two: string;
     public round_number: number = 1;
     public round_logs: IRoundResponse[];
+    public mode: string;
 
     public get winner(): string {
         return this.get_winner();
@@ -31,7 +32,7 @@ export class GameModel {
     }
 
     public createGame(): Promise<IGameResponse> {
-        const data = { player_one: this.player_one, player_two: this.player_two };
+        const data = { player_one: this.player_one, player_two: this.player_two, mode: this.mode };
 
         return this.handleHttpCalls('/API/version/1/game/', {
             method: 'POST',
@@ -41,6 +42,7 @@ export class GameModel {
             this.id = dataResponse.id;
             this.player_one = dataResponse.player_one;
             this.player_two = dataResponse.player_two;
+            this.mode = dataResponse.mode;
             this.round_number = 1;
 
             return dataResponse;
@@ -54,6 +56,7 @@ export class GameModel {
                     this.id = dataResponse.id;
                     this.player_one = dataResponse.player_one;
                     this.player_two = dataResponse.player_two;
+                    this.mode = dataResponse.mode;
                     this.round_number = dataResponse.total_rounds + 1;
 
                     return dataResponse;

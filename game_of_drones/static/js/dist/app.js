@@ -37,7 +37,7 @@ System.register("models/game.model", [], function (exports_2, context_2) {
                     });
                 }
                 createGame() {
-                    const data = { player_one: this.player_one, player_two: this.player_two };
+                    const data = { player_one: this.player_one, player_two: this.player_two, mode: this.mode };
                     return this.handleHttpCalls('/API/version/1/game/', {
                         method: 'POST',
                         body: JSON.stringify(data),
@@ -46,6 +46,7 @@ System.register("models/game.model", [], function (exports_2, context_2) {
                         this.id = dataResponse.id;
                         this.player_one = dataResponse.player_one;
                         this.player_two = dataResponse.player_two;
+                        this.mode = dataResponse.mode;
                         this.round_number = 1;
                         return dataResponse;
                     });
@@ -57,6 +58,7 @@ System.register("models/game.model", [], function (exports_2, context_2) {
                             this.id = dataResponse.id;
                             this.player_one = dataResponse.player_one;
                             this.player_two = dataResponse.player_two;
+                            this.mode = dataResponse.mode;
                             this.round_number = dataResponse.total_rounds + 1;
                             return dataResponse;
                         }
@@ -154,11 +156,18 @@ System.register("components/new_game.component", [], function (exports_5, contex
                     this.submit = () => {
                         this.gameModel.player_one = this.playerOne.value;
                         this.gameModel.player_two = this.playerTwo.value;
+                        if (this.normalMode.checked) {
+                            this.gameModel.mode = 'normal';
+                        }
+                        else {
+                            this.gameModel.mode = 'advanced';
+                        }
                         this.gameModel.createGame().then(() => this.router.goTo('round_game'));
                     };
                     htmlElement.innerHTML = this.htmlContent;
                     this.playerOne = htmlElement.querySelector('#player_one_name');
                     this.playerTwo = htmlElement.querySelector('#player_two_name');
+                    this.normalMode = htmlElement.querySelector('#normal_mode');
                     const button = htmlElement.querySelector('.startButton');
                     button.onclick = this.submit;
                 }
@@ -168,13 +177,20 @@ System.register("components/new_game.component", [], function (exports_5, contex
               <h3>
                 Welcome, enter player names          
               </h3>
-              <div>
+              <fieldset>
                 <label for="player_one_name">player 1:</label>   
                 <input id="player_one_name" class="playerName playerOneName">
                 <br>           
                 <label for="player_two_name">player 2:</label>              
                 <input id="player_two_name" class="playerName playerTwoName">           
-              </div>
+              </fieldset>
+              <h4>Mode:</h4>
+              <fieldset id="mode-group">
+                <label for="normal_mode">Normal:</label>              
+                <input id="normal_mode" type="radio" name="mode-group"> 
+                <label for="advanced_mode">Advanced:</label>   
+                <input id="advanced_mode" type="radio" name="mode-group">                     
+              </fieldset>
               <button class="startButton">Start</button>      
             </div>
         `;
@@ -224,12 +240,19 @@ System.register("components/game_round.component", ["constants/movements"], func
                     this.router = router;
                     this.round_number = 1;
                     this.roundsLogs = [];
+                    this.MOVEMENTS = [];
                     this.players_movements = {
                         player_one: '',
                         player_two: ''
                     };
                     this.round_number = gameModel.round_number;
                     this.current_player = { name: this.gameModel.player_one, player: "player_one" };
+                    if (gameModel.mode === 'normal') {
+                        this.MOVEMENTS = movements_1.BASIC_MOVEMENTS;
+                    }
+                    else {
+                        this.MOVEMENTS = movements_1.ADVANCED_MOVEMENTS;
+                    }
                     this.updateView();
                     this.gameModel.getGameRoundsLogs().then(roundsLogs => {
                         this.roundsLogs = roundsLogs;
@@ -242,7 +265,7 @@ System.register("components/game_round.component", ["constants/movements"], func
               <h1>Round ${this.round_number}</h1>
               <h2>${this.current_player.name}, make a movement: </h2>
               <div> 
-                ${movements_1.BASIC_MOVEMENTS.map((movement, index) => `<button id="button${index}" class="btn-game btn-${movement}">${movement}</button>`).join('')}
+                ${this.MOVEMENTS.map((movement, index) => `<button id="button${index}" class="btn-game btn-${movement}">${movement}</button>`).join('')}
               </div>
           </div>
           <div id="roundLogs">
@@ -263,7 +286,7 @@ System.register("components/game_round.component", ["constants/movements"], func
                     this.htmlElement.innerHTML = this.htmlContent;
                     const buttons = Array.prototype.slice.call(this.htmlElement.querySelectorAll('button'));
                     buttons.forEach((button, index) => {
-                        button.onclick = (event) => this.makeMovement(movements_1.BASIC_MOVEMENTS[index]);
+                        button.onclick = (event) => this.makeMovement(this.MOVEMENTS[index]);
                     });
                 }
                 makeMovement(move) {

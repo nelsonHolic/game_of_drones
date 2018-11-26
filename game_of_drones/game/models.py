@@ -17,10 +17,15 @@ class Player(models.Model):
 
 
 class Game(models.Model):
+    MODE = (
+        ('advanced', 'advanced',),
+        ('normal', 'normal',)
+    )
 
     id = models.AutoField(primary_key=True)
     player_one = models.ForeignKey('Player', on_delete=models.CASCADE, related_name='player_one')
     player_two = models.ForeignKey('Player', on_delete=models.CASCADE, related_name='player_two')
+    mode = models.CharField(max_length=10, choices=MODE)
     creation = models.DateTimeField(auto_now_add=True)
 
     class Meta:

@@ -2,6 +2,7 @@ export interface IGameResponse {
     id: number;
     player_one: string;
     player_two: string;
+    mode: string;
     total_rounds?: number;
 }
 

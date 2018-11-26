@@ -8,27 +8,7 @@ export class GameModel {
     public round_logs: IRoundResponse[];
 
     public get winner(): string {
-        const results = {};
-
-        for(const log of this.round_logs) {
-            if(!log.winner) {
-                continue
-            }
-
-            if(results[log.winner]) {
-                results[log.winner] += 1
-            } else {
-                results[log.winner] = 1;
-            }
-        }
-
-        if (results[this.player_one] > results[this.player_two]) {
-            return this.player_one
-        } else if (results[this.player_one] < results[this.player_two]) {
-            return this.player_two
-        } else {
-            return null;
-        }
+        return this.get_winner();
     }
 
     constructor() { }
@@ -85,6 +65,30 @@ export class GameModel {
                 this.round_logs = dataResponse;
                 return dataResponse;
             })
+    }
+
+    public get_winner(): string {
+        const results = {};
+
+        for(const log of this.round_logs) {
+            if(!log.winner) {
+                continue
+            }
+
+            if(results[log.winner]) {
+                results[log.winner] += 1
+            } else {
+                results[log.winner] = 1;
+            }
+        }
+
+        if (results[this.player_one] > results[this.player_two]) {
+            return this.player_one
+        } else if (results[this.player_one] < results[this.player_two]) {
+            return this.player_two
+        } else {
+            return null;
+        }
     }
 
 

@@ -1,7 +1,7 @@
 import { GameModel } from "../models/game.model";
 import { BASIC_MOVEMENTS } from "../constants/movements";
-import {IPlayerRound, IRoundResponse} from "../interfaces/game.interfaces";
-import {BaseRouter} from "../routers/base";
+import { IPlayerRound, IRoundResponse } from "../interfaces/game.interfaces";
+import { BaseRouter } from "../routers/base";
 
 export class GameRoundComponent {
 

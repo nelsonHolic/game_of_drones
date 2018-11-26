@@ -1,5 +1,5 @@
 import { GameModel } from "../models/game.model";
-import {BaseRouter} from "../routers/base";
+import { BaseRouter } from "../routers/base";
 
 export class GameResultComponent {
 
